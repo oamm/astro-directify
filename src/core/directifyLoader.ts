@@ -1,9 +1,9 @@
 import type {Plugin} from "vite";
 import {ServerDirectiveHandler} from "./types";
-import {directiveIf} from "../directives/directiveIf";
 import fs from "node:fs";
-import {directifyOptions} from "./directify";
+import {directifyOptions} from "./directifyIntegration";
 import {transformDirectifyDirectives} from "./transformDirectifyDirectives";
+import {directiveIf} from "../directives";
 
 const RAW_ASTRO_TEMPLATE_RE =
     /\.astro(\?astro)?([&?]type=template)?$/;

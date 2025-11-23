@@ -58,7 +58,7 @@ export interface directifyOptions {
  * @returns {AstroIntegration}
  *   A fully registered Astro integration that injects the Directify loader.
  */
-export default function directify(options: directifyOptions = {}): AstroIntegration {
+export function directifyIntegration(options: directifyOptions = {}): AstroIntegration {
     return {
         name: "astro-directify",
         hooks: {

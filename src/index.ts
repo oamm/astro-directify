@@ -1,4 +1,5 @@
-import * as directify from './core/directify';
+import {directifyIntegration} from './core/directifyIntegration';
+
 export * from './core/types'
 
-export default directify
+export default directifyIntegration;
