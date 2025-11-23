@@ -1,0 +1,79 @@
+{
+  "name": "astro-directify",
+  "version": "0.0.1-alpha.1",
+  "description": "Declarative server-side control-flow directives for Astro (d:if).",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+
+    "./directives": {
+      "import": "./dist/directives/index.js",
+      "types": "./dist/directives/index.d.ts"
+    },
+
+    "./directify-directives.d.ts": {
+      "types": "./dist/directify-directives.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "dist/directify-directives.d.ts"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "types:bundle": "rollup -c rollup.config.mjs",
+    "clean": "rimraf dist",
+    "dev": "tsc --watch --project tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "bench": "vitest bench run bench/",
+    "prepublishOnly": "npm run clean && npm run build && npm run types:bundle",
+    "prepare": "npm run prepublishOnly"
+  },
+  "keywords": [
+    "astro",
+    "astrojs",
+    "directives",
+    "d:if",
+    "control-flow",
+    "template",
+    "compiler",
+    "transform",
+    "typescript",
+    "esm"
+  ],
+  "author": "Alex Mora",
+  "license": "MIT",
+  "peerDependencies": {
+    "astro": "^4.0.0 || ^5.0.0",
+    "@astrojs/compiler": "^2.13.0"
+  },
+  "devDependencies": {
+    "vite": "^6.4.1",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.46.2",
+    "rollup-plugin-dts": "^6.2.1",
+    "typescript": "^5.3.3",
+    "undici": "^7.13.0",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:oamm/astro-directify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oamm/astro-directify/issues"
+  },
+  "homepage": "https://github.com/oamm/astro-directify#readme"
+}
