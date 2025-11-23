@@ -1,6 +1,6 @@
 {
   "name": "astro-directify",
-  "version": "0.0.1-alpha.2",
+  "version": "0.0.1-alpha.3",
   "description": "Declarative server-side control-flow directives for Astro (d:if).",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,19 +10,20 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-
     "./directives": {
       "import": "./dist/directives/index.js",
       "types": "./dist/directives/index.d.ts"
     },
-
+    "./directives/*": {
+      "import": "./dist/directives/*.js",
+      "types": "./dist/directives/*.d.ts"
+    },
     "./directify-directives.d.ts": {
       "types": "./dist/directify-directives.d.ts"
     }
   },
   "files": [
-    "dist",
-    "dist/directify-directives.d.ts"
+    "dist"
   ],
   "scripts": {
     "build": "tsc --project tsconfig.json",
@@ -50,16 +51,18 @@
   "author": "Alex Mora",
   "license": "MIT",
   "peerDependencies": {
-    "astro": "^4.0.0 || ^5.0.0",
-    "@astrojs/compiler": "^2.13.0"
+    "@astrojs/compiler": "^2.13.0",
+    "astro": "^4.0.0 || ^5.0.0"
   },
   "devDependencies": {
-    "vite": "^6.4.1",
+    "@rollup/plugin-typescript": "^12.3.0",
     "rimraf": "^6.0.1",
     "rollup": "^4.46.2",
     "rollup-plugin-dts": "^6.2.1",
+    "tsup": "^8.5.1",
     "typescript": "^5.3.3",
     "undici": "^7.13.0",
+    "vite": "^6.4.1",
     "vitest": "^3.2.4"
   },
   "engines": {

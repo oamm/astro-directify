@@ -1,17 +1,29 @@
-// rollup.config.mjs
-import dts from "rollup-plugin-dts";
+import typescript from "@rollup/plugin-typescript";
 import { copyFileSync } from "node:fs";
 
 export default [
-    // 1. Type bundle
+    // --------------------------------------------
+    // 1) JS output — no declarations here!
+    // --------------------------------------------
     {
-        input: "dist/index.d.ts",
+        input: "src/index.ts",
         output: {
-            file: "dist/index.d.ts",
-            format: "es"
+            dir: "dist",
+            format: "esm",
+            preserveModules: true,
+            preserveModulesRoot: "src",
+            entryFileNames: "[name].js",  // Force .js extension
         },
+        external: [
+            "node:fs",
+            "@astrojs/compiler",
+            "@astrojs/compiler/utils"
+        ],
         plugins: [
-            dts(),
+            typescript({
+                tsconfig: "./tsconfig.json",
+                declaration: true,        // IMPORTANT
+            }),
             {
                 name: "copy-directify-directives",
                 writeBundle() {
@@ -22,5 +34,5 @@ export default [
                 }
             }
         ]
-    }
+    },
 ];
