@@ -26,10 +26,10 @@ Enable the plugin in your Astro config:
 ```js
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
-import directify from 'astro-directify';
+import {directifyIntegration} from 'astro-directify'
 
 export default defineConfig({
-  integrations: [directify()]
+  integrations: [directifyIntegration()]
 });
 ```
 
