@@ -4,7 +4,7 @@ import {directifyLoader} from "./directifyLoader";
 import {mergeDirectiveHandlers, registerChain} from "../chain/chainRegistry";
 import {IF_CHAIN} from "../handlers/ifChain";
 import {SWITCH_CHAIN} from "../handlers/switchChain";
-import {directiveFor} from "../directives";
+import {directiveFor} from "../directives/directiveFor";
 
 registerChain(IF_CHAIN);
 registerChain(SWITCH_CHAIN);
