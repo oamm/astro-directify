@@ -1,20 +1,14 @@
 import type {AstroIntegration} from "astro";
 import {ServerDirectiveHandler} from "./types";
 import {directifyLoader} from "./directifyLoader";
+import {mergeDirectiveHandlers, registerChain} from "../chain/chainRegistry";
+import {IF_CHAIN} from "../handlers/ifChain";
+import {SWITCH_CHAIN} from "../handlers/switchChain";
+import {directiveFor} from "../directives";
 
+registerChain(IF_CHAIN);
+registerChain(SWITCH_CHAIN);
 
-/**
- * Options for configuring the Directify integration.
- *
- * @typedef {Object} directifyOptions
- * @property {Record<string, ServerDirectiveHandler>} [directives]
- *   A map of directive handlers indexed by directive name.
- *   Each key corresponds to a directive prefix (e.g., `"if"` for `d:if`),
- *   and the value is a custom transformer that modifies the AST node.
- *
- *   By default, Directify includes built-in directives (like `d:if`),
- *   but this option allows you to extend or override them.
- */
 export interface directifyOptions {
     directives?: Record<string, ServerDirectiveHandler>;
 }
@@ -65,10 +59,18 @@ export function directifyIntegration(options: directifyOptions = {}): AstroInteg
             "astro:config:setup"({updateConfig, logger}) {
                 logger.info("[directify] Registering loader (pre-Astro)…");
 
+                const directiveHandlers = mergeDirectiveHandlers({
+                    for: directiveFor,
+                    ...(options.directives ?? {})
+                });
+
                 updateConfig({
                     vite: {
                         plugins: [
-                            directifyLoader(options),
+                            directifyLoader({
+                                ...options,
+                                directives: directiveHandlers
+                            }),
                         ],
                     }
                 });

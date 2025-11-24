@@ -1,6 +1,7 @@
 import {parse} from "@astrojs/compiler";
 import {is, serialize} from "@astrojs/compiler/utils";
 import {directifyServerDirectivesConfig} from "./types";
+import {rewriteChainsInline} from "../chain/rewriteChainsInline";
 
 const cache = new Map<string, { src: string; out: string }>();
 
@@ -9,10 +10,13 @@ export async function transformDirectifyDirectives(
     config: directifyServerDirectivesConfig = {},
     cacheKey?: string
 ): Promise<string> {
+
+    // Fast path: no directives
     if (!code.includes("d:")) {
         return code;
     }
 
+    // Cached result
     if (cacheKey) {
         const cached = cache.get(cacheKey);
         if (cached && cached.src === code) return cached.out;
@@ -26,15 +30,17 @@ export async function transformDirectifyDirectives(
 
     function visit(node: any, parent: any, index: number = -1) {
         if (!node || typeof node !== "object") return;
+
+        // Tag-level directives
         if (is.tag(node) && Array.isArray(node.attributes)) {
-            const attrs = node.attributes as any[];
+            const attrs = node.attributes;
 
             for (const attr of attrs) {
                 if (!attr?.name || typeof attr.name !== "string") continue;
                 if (!attr.name.startsWith("d:")) continue;
 
-                const directive = attr.name.slice(2);
-                const handler = directives[directive];
+                const directiveName = attr.name.slice(2);
+                const handler = directives[directiveName];
 
                 const removeAttribute = () => {
                     const idx = attrs.indexOf(attr);
@@ -57,23 +63,25 @@ export async function transformDirectifyDirectives(
                 }
             }
         }
-        const children = (node as any).children;
+
+        const children = node.children;
         if (Array.isArray(children)) {
             for (let i = 0; i < children.length; i++) {
-                const child = children[i];
-                visit(child, node, i);
+                visit(children[i], node, i);
             }
         }
     }
 
     visit(ast, null);
 
-    if (tasks.length === 0) {
+    if (tasks.length === 0)
         return code;
-    }
+
     for (const apply of tasks) {
         apply();
     }
+
+    rewriteChainsInline(ast);
 
     const result = serialize(ast);
 

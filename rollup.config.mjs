@@ -2,9 +2,6 @@ import typescript from "@rollup/plugin-typescript";
 import { copyFileSync } from "node:fs";
 
 export default [
-    // --------------------------------------------
-    // 1) JS output — no declarations here!
-    // --------------------------------------------
     {
         input: "src/index.ts",
         output: {
@@ -12,7 +9,7 @@ export default [
             format: "esm",
             preserveModules: true,
             preserveModulesRoot: "src",
-            entryFileNames: "[name].js",  // Force .js extension
+            entryFileNames: "[name].js",
         },
         external: [
             "node:fs",
@@ -22,7 +19,7 @@ export default [
         plugins: [
             typescript({
                 tsconfig: "./tsconfig.json",
-                declaration: true,        // IMPORTANT
+                declaration: true,
             }),
             {
                 name: "copy-directify-directives",

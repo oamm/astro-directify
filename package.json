@@ -1,6 +1,6 @@
 {
   "name": "astro-directify",
-  "version": "0.0.1-alpha.3",
+  "version": "0.0.1-alpha.4",
   "description": "Declarative server-side control-flow directives for Astro (d:if).",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,14 +9,6 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./directives": {
-      "import": "./dist/directives/index.js",
-      "types": "./dist/directives/index.d.ts"
-    },
-    "./directives/*": {
-      "import": "./dist/directives/*.js",
-      "types": "./dist/directives/*.d.ts"
     },
     "./directify-directives.d.ts": {
       "types": "./dist/directify-directives.d.ts"
