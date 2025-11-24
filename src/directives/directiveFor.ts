@@ -1,6 +1,46 @@
 import {ServerDirectiveHandler} from "../core/types";
 import {replaceNode} from "../core/replaceNode";
 
+export const directiveFor: ServerDirectiveHandler = ({
+                                                         tag,
+                                                         attr,
+                                                         removeAttribute,
+                                                         ast,
+                                                         parent,
+                                                         index
+                                                     }) => {
+    removeAttribute();
+
+    const raw =
+        typeof attr.value === "string"
+            ? attr.value
+            : Array.isArray(attr.value)
+                ? attr.value.map((p: any) => p?.value ?? "").join("").trim()
+                : "";
+
+    const { item, index: indexName, items } = parseFor(raw);
+    const params = indexName ? `${item}, ${indexName}` : item;
+
+    // Expression content WITHOUT `{ }`
+    const expr = {
+        type: "expression",
+        children: [
+            { type: "text", value: `${items}.map((${params}) => (` },
+            tag,
+            { type: "text", value: `))` }
+        ]
+    };
+
+    // Replace the <li d:for> node with a direct expression
+    replaceNode(
+        tag,
+        expr,   // 👈 directly pass the expression, no outer fragment!
+        ast,
+        parent,
+        index
+    );
+};
+
 function parseFor(raw: string) {
     const cleaned = raw.trim();
     const [lhs, rhs] = cleaned.split(/\s+in\s+/);
@@ -31,43 +71,3 @@ function parseFor(raw: string) {
         items: rhs.trim()
     };
 }
-
-export const directiveFor: ServerDirectiveHandler = ({
-                                                         tag,
-                                                         attr,
-                                                         removeAttribute,
-                                                         ast,
-                                                         parent,
-                                                         index
-                                                     }) => {
-    removeAttribute();
-
-    const raw =
-        typeof attr.value === "string"
-            ? attr.value
-            : Array.isArray(attr.value)
-                ? attr.value.map((p: any) => p?.value ?? "").join("").trim()
-                : "";
-
-    const {item, index: indexName, items} = parseFor(raw);
-
-    const params = indexName ? `${item}, ${indexName}` : item;
-
-    const expr = {
-        type: "expression",
-        children: [
-            {type: "text", value: `{${items}.map((${params}) => `},
-            tag,
-            {type: "text", value: ")}`"}
-        ]
-    };
-
-    const fragment = {
-        type: "fragment",
-        name: "",
-        attributes: [],
-        children: [expr]
-    };
-
-    replaceNode(tag, fragment, ast, parent, index);
-};

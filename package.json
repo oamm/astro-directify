@@ -1,6 +1,6 @@
 {
   "name": "astro-directify",
-  "version": "0.0.1-alpha.4",
+  "version": "0.0.1-alpha.5",
   "description": "Declarative server-side control-flow directives for Astro (d:if).",
   "type": "module",
   "main": "./dist/index.js",
