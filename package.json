@@ -38,7 +38,9 @@
     "compiler",
     "transform",
     "typescript",
-    "esm"
+    "esm",
+    "withastro",
+    "utils"
   ],
   "author": "Alex Mora",
   "license": "MIT",
